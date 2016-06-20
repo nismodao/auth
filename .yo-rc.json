@@ -1,0 +1,8 @@
+{
+  "generator-react-webpack": {
+    "appName": "adryft",
+    "style": "css",
+    "postcss": true,
+    "generatedWithVersion": 3
+  }
+}
