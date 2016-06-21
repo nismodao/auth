@@ -3,33 +3,36 @@ var refresh  = require('passport-oauth2-refresh');
 
 module.exports = {
   refresh: (req, res) => {
-    var user = req.url.slice(17);
-    Model.User.findOne({email: user})
+    var id = req.url.slice(7);
+    Model.User.findOne({_id: id})
       .then((result) => {
         refresh.requestNewAccessToken('google', result.refresh_token, 
-        (err, accessToken, refreshToken) => {
-        console.log('refreshtoken', refreshToken);
-        console.log('updated accessToken', accessToken);  
-        res.json({accessToken: accessToken, refreshToken: refreshToken});
+        (err, accessToken, refreshToken) => {  
+        res.json({accessToken: accessToken});
         })
       })
       .catch((err) => {
-        console.log('err is', err);
+        res.send('no token available');
       });
   },
-  getProfile: (req, res) => {
-    var user = req.url.slice(9);
-    Model.User.findOne({email: user})
+  getUsers: (req, res) => {
+    var users = [];
+    Model.User.find({})
     .then((result) => {
-      console.log('result from get profile', result)
-      res.json(result);
+      result.forEach((value) => {
+        if (!!value.refresh_token) users.push(value._id);
+      });
+      res.json(users);
+    })
+    .catch((err) => {
+      res.send('err in finding user');
     });
   },
   logOut: (req, res) => {
     req.logout();
     res.redirect('/');
   },
-  dropTable: () => {
+  dropTable: (req, res) => {
     Model.User.remove(function (err, result) {
       if (err) {
         console.log('err is', err);
@@ -37,6 +40,7 @@ module.exports = {
         console.log('result is', result);
       }
     });
+    res.send('table dropped');
   }
 }
 

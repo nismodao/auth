@@ -1,42 +1,27 @@
 var express          = require( 'express' )
   , app              = express()
-  , request          = require('request')
-  , mongoose         = require('mongoose')
-  , Model            = require('./db/config')
+  , request          = require( 'request' )
+  , mongoose         = require( 'mongoose' )
+  , Model            = require( './db/config' )
   , server           = require( 'http' ).createServer( app ) 
   , passport         = require( 'passport' )
-  , refresh          = require('passport-oauth2-refresh')
+  , refresh          = require( 'passport-oauth2-refresh')
   , util             = require( 'util' )
   , bodyParser       = require( 'body-parser' )
   , cookieParser     = require( 'cookie-parser' )
   , session          = require( 'express-session' )
   , RedisStore       = require( 'connect-redis' )( session )
   , GoogleStrategy   = require( 'passport-google-oauth20' ).Strategy
-  , googleKey        = require('./keyConfig')
-  , handler          = require('./handler')
-  , strategy         = require('./authStrategy');
-
-var ensureAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login');
-};
-
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
-});
-
-
-
+  , googleKey        = require( './keyConfig')
+  , handler          = require( './handler')
+  , strategy         = require( './authStrategy');
+ 
 var strategy = strategy.google;
 passport.use(strategy);
 refresh.use(strategy);
 
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
+app.set( 'views', __dirname + '/views');
+app.set( 'view engine', 'ejs');
 app.use( express.static(__dirname + '/public'));
 app.use( cookieParser()); 
 app.use( bodyParser.json());
@@ -55,12 +40,29 @@ app.use( session({
     resave: true,
     saveUninitialized: true
 }));
+
 app.use( passport.initialize());
 app.use( passport.session());
 
-app.get('/', (req, res) => {
-  res.render('index', { user: req.user });
+passport.serializeUser( (user, done) => {
+  done(null, user);
 });
+
+passport.deserializeUser( (obj, done) => {
+  done(null, obj);
+});
+
+app.get('/', (req, res) => {
+  console.log('req.body', req.body);
+  res.render('index', { user: strategy.user});
+});
+
+var ensureAuthenticated = ( req, res, next ) => {
+  if (req.isAuthenticated()) {
+   return next(); 
+ }
+  res.redirect('/login');
+};
 
 app.get('/account', ensureAuthenticated, (req, res) => {
   res.render('account', { user: req.user });
@@ -69,7 +71,6 @@ app.get('/account', ensureAuthenticated, (req, res) => {
 app.get('/login', (req, res) => {
   res.render('login', { user: req.user });
 });
-
 
 app.get('/auth/google', passport.authenticate('google', { scope: [
   'https://www.googleapis.com/auth/plus.login',
@@ -86,8 +87,13 @@ app.get('/auth/google/callback',
 }));
 
 app.get('/logout', handler.logOut);
-app.get('/profile/refresh/:email', handler.refresh);
-app.get('/profile/:email', handler.getProfile);
+app.get('/token/:userId', handler.refresh);
+app.get('/connected/gmail', handler.getUsers);
+app.get('/dropTable', handler.dropTable);
+
+// var removeUser = (email) => {
+//   Model.User.find({email: email}).remove().exec(); 
+// }
 
 server.listen( 3000 );
 
