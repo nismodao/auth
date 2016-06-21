@@ -31,3 +31,5 @@ bower_components/
 
 # config
 keyConfig.js
+
+.DS_Store

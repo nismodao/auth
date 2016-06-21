@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/adryft');
+mongoose.connect('mongodb://localhost:27017/abc');
+var findOrCreate = require('mongoose-findorcreate')
 
 var db = mongoose.connection;
 
@@ -20,8 +21,10 @@ var userSchema = new Schema({
   refresh_token: String
 });
 
+userSchema.plugin(findOrCreate);
+
 var User = mongoose.model('User', userSchema);
 
-module.exports.db = db;
+//module.exports.db = db;
 
 module.exports.User = User;
