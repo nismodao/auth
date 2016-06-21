@@ -1,16 +1,22 @@
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/abc');
-var findOrCreate = require('mongoose-findorcreate')
+var MongoClient = require('mongodb').MongoClient;
+var findOrCreate = require('mongoose-findorcreate');
+var MONGODB_URI = require('./mlabconfig.js');
+var MONGODB_URI = process.env.MONGODB_URI || MONGODB_URI.MONGODB_URI;
+var db;
 
-var db = mongoose.connection;
-
-db.on('error', function () {
-  console.log('db could not connect');
+mongoose.connect(MONGODB_URI, 
+  function (err, database) {
+  if (err) {
+    console.log(err);
+    process.exit(1);
+  } else {
+  db = database;
+  console.log("Database connection ready");
+  }
 });
 
-db.once('open', function () {
-  console.log('connection to db good');
-});
+  // Save database object from the callback for reuse.
 
 var Schema = mongoose.Schema;
 

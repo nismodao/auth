@@ -19,7 +19,7 @@ var express          = require( 'express' )
 var strategy = strategy.google;
 passport.use(strategy);
 refresh.use(strategy);
-
+var PORT = process.env.PORT || 3000;
 app.set( 'views', __dirname + '/views');
 app.set( 'view engine', 'ejs');
 app.use( express.static(__dirname + '/public'));
@@ -95,7 +95,7 @@ app.get('/dropTable', handler.dropTable);
 //   Model.User.find({email: email}).remove().exec(); 
 // }
 
-server.listen( 3000 );
+server.listen( PORT );
 
 
 
