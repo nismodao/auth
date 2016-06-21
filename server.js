@@ -1,6 +1,8 @@
 var express          = require( 'express' )
   , app              = express()
   , request          = require('request')
+  , mongoose         = require('mongoose')
+  , Model            = require('./db/config')
   , server           = require( 'http' ).createServer( app ) 
   , passport         = require( 'passport' )
   , util             = require( 'util' )
@@ -28,7 +30,7 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 
-var currentTopic = 'projects/adryft-1345/topics/nismo';
+var currentTopic = 'projects/adryft-1345/topics/abc123';
 
 var connect = (userId, auth, topic) => {
   request({
@@ -65,7 +67,8 @@ passport.use(new GoogleStrategy({
       console.log('at is', accessToken, 'rt is', refreshToken);
       console.log('profile is', profile.emails[0].value);
       user.accessToken = accessToken;
-      user.id = profile.emails[0].value; 
+      user.id = profile.emails[0].value;
+      user.refreshToken = refreshToken; 
       connect(user.id, user.accessToken, currentTopic);
       return done(null, profile);
     });
@@ -113,20 +116,11 @@ app.get('/login', function(req, res){
 //   will redirect the user back to this application at /auth/google/callback
 app.get('/auth/google', passport.authenticate('google', { scope: [
   'https://www.googleapis.com/auth/plus.login',
-  'https://mail.google.com/',
-  'https://www.googleapis.com/auth/gmail.modify',
   'https://www.googleapis.com/auth/gmail.readonly',
-  'https://www.googleapis.com/auth/plus.profile.emails.read',
-  'https://www.googleapis.com/auth/cloud-platform',
-  'https://www.googleapis.com/auth/pubsub'],
-  accessType: 'offline'
+  'https://www.googleapis.com/auth/plus.profile.emails.read'],
+   accessType: 'offline'
 }));
 
-// GET /auth/google/callback
-//   Use passport.authenticate() as route middleware to authenticate the
-//   request.  If authentication fails, the user will be redirected back to the
-//   login page.  Otherwise, the primary route function function will be called,
-//   which, in this example, will redirect the user to the home page.
 app.get('/auth/google/callback', 
   passport.authenticate( 'google', { 
     successRedirect: '/',
@@ -136,6 +130,13 @@ app.get('/auth/google/callback',
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
+});
+
+app.get('/profile/:email', (req, res) => {
+  var user = req.url.slice(9);
+  //look in database for user
+  //send user the info 
+  res.json(user);
 });
 
 server.listen( 3000 );

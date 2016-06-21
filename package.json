@@ -71,6 +71,8 @@
     "ejs": "^2.4.2",
     "express": "^4.14.0",
     "express-session": "^1.13.0",
+    "mongo": "^0.1.0",
+    "mongoose": "^4.5.1",
     "normalize.css": "^4.0.0",
     "passport": "^0.3.2",
     "react": "^15.0.0",
