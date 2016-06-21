@@ -5,7 +5,7 @@ module.exports = {
   google: new GoogleStrategy({
     clientID:     googleKey.clientID,
     clientSecret: googleKey.clientSecret,
-    callbackURL: "http://fuf.me:3000/auth/google/callback",
+    callbackURL: "https://adryftnismo.herokuapp.com/auth/google/callback",
     passReqToCallback: true
     },
     (request, accessToken, refreshToken, profile, done) => {
