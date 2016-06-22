@@ -12,7 +12,6 @@ var express          = require( 'express' )
   , session          = require( 'express-session' )
   , RedisStore       = require( 'connect-redis' )( session )
   , GoogleStrategy   = require( 'passport-google-oauth20' ).Strategy
-  , googleKey        = require( './keyConfig')
   , handler          = require( './handler')
   , strategy         = require( './authStrategy');
  
