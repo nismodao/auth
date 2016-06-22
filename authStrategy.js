@@ -1,10 +1,13 @@
 var GoogleStrategy   = require( 'passport-google-oauth20' ).Strategy;
 var googleKey        = require( './keyConfig' );
 var Model            = require( './db/config' );
+var clientID = process.env.clientID || googleKey.clientID;
+var clientSecret = process.env.clientSecret || googleKey.clientSecret;
+
 module.exports = {
   google: new GoogleStrategy({
-    clientID:     googleKey.clientID,
-    clientSecret: googleKey.clientSecret,
+    clientID:     clientID,
+    clientSecret: clientSecret,
     callbackURL: "https://adryftnismo.herokuapp.com/auth/google/callback",
     passReqToCallback: true
     },
