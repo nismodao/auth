@@ -1,8 +1,8 @@
 var GoogleStrategy   = require( 'passport-google-oauth20' ).Strategy;
 //var googleKey        = require( './keyConfig' );
 var Model            = require( './db/config' );
-var clientID = process.env.clientID;
-var clientSecret = process.env.clientSecret;
+var clientID = process.env.GMAIL_CLIENT_ID;
+var clientSecret = process.env.GMAIL_CLIENT_SECRET;
 
 module.exports = {
   google: new GoogleStrategy({
