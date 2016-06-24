@@ -1,14 +1,13 @@
 var GoogleStrategy   = require( 'passport-google-oauth20' ).Strategy;
-//var googleKey        = require( './keyConfig' );
 var Model            = require( './db/config' );
-var clientID = process.env.GMAIL_CLIENT_ID;
-var clientSecret = process.env.GMAIL_CLIENT_SECRET;
+var clientID         = process.env.GMAIL_CLIENT_ID;
+var clientSecret     = process.env.GMAIL_CLIENT_SECRET;
 
 module.exports = {
   google: new GoogleStrategy({
     clientID:     clientID,
     clientSecret: clientSecret,
-    callbackURL: "http://fuf.me:3000/auth/google/callback",
+    callbackURL: process.env.WEBSERVER_URL + '/v1/auth/callback/google',
     passReqToCallback: true
     },
     (request, accessToken, refreshToken, profile, done) => {

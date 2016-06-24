@@ -30,7 +30,7 @@ module.exports = {
   },
   logOut: (req, res) => {
     req.logout();
-    res.redirect('/');
+    res.redirect('/v1/auth');
   },
   dropTable: (req, res) => {
     Model.User.remove(function (err, result) {
@@ -43,22 +43,3 @@ module.exports = {
     res.send('table dropped');
   }
 }
-
-
-// connect: (userId, auth, topic) => {
-//     request({
-//       url: 'https://www.googleapis.com/gmail/v1/users/' + userId + '/watch',
-//       headers: {
-//      'content-type': 'application/json',
-//      'Authorization': 'Bearer '+ auth
-//      },
-//       method: 'POST',
-//       json: {topicName: topic} 
-//     }, (error, response, body) => {
-//       if (error) {
-//           console.log("error is", error);
-//       } else {
-//           console.log(response.statusCode, body);
-//       }
-//     }); 
-//   }  

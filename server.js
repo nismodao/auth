@@ -51,7 +51,7 @@ passport.deserializeUser( (obj, done) => {
   done(null, obj);
 });
 
-app.get('/', (req, res) => {
+app.get('/v1/auth', (req, res) => {
   console.log('req.body', req.body);
   res.render('index', { user: strategy.user});
 });
@@ -60,18 +60,18 @@ var ensureAuthenticated = ( req, res, next ) => {
   if (req.isAuthenticated()) {
    return next(); 
  }
-  res.redirect('/login');
+  res.redirect('/v1/auth/login');
 };
 
-app.get('/account', ensureAuthenticated, (req, res) => {
+app.get('/v1/auth/account', ensureAuthenticated, (req, res) => {
   res.render('account', { user: req.user });
 });
 
-app.get('/login', (req, res) => {
+app.get('/v1/auth/login', (req, res) => {
   res.render('login', { user: req.user });
 });
 
-app.get('/auth/google', passport.authenticate('google', { scope: [
+app.get('/v1/auth/google', passport.authenticate('google', { scope: [
   'https://www.googleapis.com/auth/plus.login',
   'https://www.googleapis.com/auth/gmail.readonly',
   'https://www.googleapis.com/auth/plus.profile.emails.read'],
@@ -79,16 +79,16 @@ app.get('/auth/google', passport.authenticate('google', { scope: [
    prompt: 'consent'
 }));
 
-app.get('/auth/google/callback', 
+app.get('/v1/auth/callback/google', 
   passport.authenticate( 'google', { 
     successRedirect: '/',
     failureRedirect: '/login'
 }));
 
-app.get('/logout', handler.logOut);
-app.get('/token/:userId', handler.refresh);
-app.get('/connected/gmail', handler.getUsers);
-app.get('/dropTable', handler.dropTable);
+app.get('/v1/auth/logout', handler.logOut);
+app.get('/v1/auth/token/gmail/:userId', handler.refresh);
+app.get('/v1/auth/connected/gmail', handler.getUsers);
+app.get('/v1/auth/dropTable', handler.dropTable);
 
 // var removeUser = (email) => {
 //   Model.User.find({email: email}).remove().exec(); 
