@@ -3,7 +3,7 @@ var refresh  = require('passport-oauth2-refresh');
 
 module.exports = {
   refresh: (req, res) => {
-    var id = req.url.slice(7);
+    var id = req.params.userId;
     Model.User.findOne({_id: id})
       .then((result) => {
         refresh.requestNewAccessToken('google', result.refresh_token, 
