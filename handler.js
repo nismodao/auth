@@ -29,8 +29,10 @@ module.exports = {
     });
   },
   logOut: (req, res) => {
-    req.logout();
-    res.redirect('/v1/auth');
+    // req.logout();
+    req.session.destroy(() => {
+      res.redirect('/');
+    });
   },
   dropTable: (req, res) => {
     Model.User.remove(function (err, result) {

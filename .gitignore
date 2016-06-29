@@ -34,3 +34,4 @@ keyConfig.js
 db/mlabconfig.js 
 
 .DS_Store
+.env
