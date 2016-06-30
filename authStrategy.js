@@ -1,6 +1,7 @@
 var passport         = require( 'passport' );
 var GoogleStrategy   = require( 'passport-google-oauth20' ).Strategy;
 var Model            = require( './db/config' );
+require('dotenv').config();
 var clientID         = process.env.GMAIL_CLIENT_ID;
 var clientSecret     = process.env.GMAIL_CLIENT_SECRET;
 

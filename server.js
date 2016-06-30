@@ -10,6 +10,7 @@ var express          = require( 'express' )
   , RedisStore       = require( 'connect-redis' )( session )
   , handler          = require( './handler')
   , strategy         = require( './authStrategy');
+require('dotenv').config();
 
  
 var strategy = strategy.google;
@@ -26,19 +27,19 @@ app.use( bodyParser.urlencoded({
 }));
 
 app.use( cookieParser('cookie_secret'));
-app.use( passport.initialize());
-app.use( passport.session());
 app.use( session({
   secret: 'cookie_secret',
   name:   'newreactions',
   resave: false,
   saveUninitialized: false,
   store:  new RedisStore({
-    host: 'redis',
+    host: 'localhost',
     port: 6379
   })
 }));
 
+app.use( passport.initialize());
+app.use( passport.session());
 
 
 var ensureAuthenticated = ( req, res, next ) => {
@@ -55,6 +56,7 @@ passport.serializeUser(function(user, done) {
 
 passport.deserializeUser(function(id, done) {
   Model.User.findById(id, function(err, user) {
+    console.log('user from deserializeUser is', user);
     done(err, user);
   });
 });
@@ -63,6 +65,8 @@ app.get('/', (req, res) => {
   console.log('req.user is', req.user);
   console.log('req.session', req.session);
   console.log('req.sessioID is', req.sessionID);
+  console.log('req.isAuthenticated is', req.isAuthenticated());
+
   if (!req.session.key) console.log('req.session.key not defined');
   if (!!req.user) req.session.key = req.user.name;
   if(req.session.key) console.log('req.session.key is defined - user has access to / page', req.session.key);
@@ -71,6 +75,8 @@ app.get('/', (req, res) => {
 
 
 app.get('/account', ensureAuthenticated, (req, res) => {
+  console.log('req.user is', req.user);
+  console.log('req.isAuthenticated is', req.isAuthenticated());
   if(req.session.key) console.log('req.session.key is defined user to / account', req.session.key);
   res.render('account', { user: req.user });
 });
@@ -97,7 +103,7 @@ app.get('/connect/google', passport.authenticate( 'google', { scope: [
 }));
 
 
-app.get('/connect/callback/google', passport.authenticate('google', { failureRedirect: '/login' }),
+app.get('/api/v1/auth/connect/callback/google', passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
     res.redirect('/');
 });
