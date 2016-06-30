@@ -25,6 +25,7 @@ app.use( bodyParser.urlencoded({
   extended: true
 }));
 
+app.use( cookieParser('cookie_secret'));
 app.use( session({
   secret: 'cookie_secret',
   name:   'newreactions',
@@ -36,7 +37,6 @@ app.use( session({
   })
 }));
 
-app.use( cookieParser());
 
 app.use( passport.initialize());
 app.use( passport.session());
