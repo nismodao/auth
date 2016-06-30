@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 var MongoClient = require('mongodb').MongoClient;
 var findOrCreate = require('mongoose-findorcreate');
-require('dotenv').config();
 
 var MONGODB_URI = process.env.MONGODB_URI;
 var db;
