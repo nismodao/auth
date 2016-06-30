@@ -51,18 +51,20 @@ var ensureAuthenticated = ( req, res, next ) => {
 };
 
 passport.serializeUser( (user, done) => {
-  console.log('user from serializeUser is', user._id);
+  console.log('user_id from serializeUser is', user._id);
   done(null, user._id);
 });
 
 passport.deserializeUser( (obj, done) => {
-  Model.User.findOrCreate({_id: obj},
+  console.log('obj from deseralize is', obj);
+  Model.User.findOne({_id: obj},
     (err, user) => {
       if (err) {
         console.log('err is', err);
         done(err, null);
       }
       if (!err) {
+        console.log('user from deserializeUser is', user);
         done(null,user);
       }
   })
@@ -70,6 +72,7 @@ passport.deserializeUser( (obj, done) => {
 
 app.get('/', (req, res) => {
   console.log('req.user is', req.user);
+  console.log('req.session', req.session);
   if (!req.session.key) console.log('req.session.key not defined');
   if (!!req.user) req.session.key = req.user.name;
   if(req.session.key) console.log('req.session.key is defined - user has access to / page', req.session.key);
