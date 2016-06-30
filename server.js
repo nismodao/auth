@@ -10,7 +10,6 @@ var express          = require( 'express' )
   , RedisStore       = require( 'connect-redis' )( session )
   , handler          = require( './handler')
   , strategy         = require( './authStrategy');
-  require('dotenv').config();
 
  
 var strategy = strategy.google;
@@ -55,9 +54,9 @@ passport.serializeUser( (user, done) => {
   done(null, user._id);
 });
 
-passport.deserializeUser( (obj, done) => {
-  console.log('obj from deseralize is', obj);
-  Model.User.findOne({_id: obj},
+passport.deserializeUser( (id, done) => {
+  console.log('id from deseralize is', id);
+  Model.User.findOne({_id: id},
     (err, user) => {
       if (err) {
         console.log('err is', err);
@@ -73,6 +72,7 @@ passport.deserializeUser( (obj, done) => {
 app.get('/', (req, res) => {
   console.log('req.user is', req.user);
   console.log('req.session', req.session);
+  console.log('req.sessioID is', req.sessionID);
   if (!req.session.key) console.log('req.session.key not defined');
   if (!!req.user) req.session.key = req.user.name;
   if(req.session.key) console.log('req.session.key is defined - user has access to / page', req.session.key);
