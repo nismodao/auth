@@ -67,10 +67,6 @@ app.get('/', (req, res) => {
   console.log('req.session', req.session);
   console.log('req.sessioID is', req.sessionID);
   console.log('req.isAuthenticated is', req.isAuthenticated());
-
-  if (!req.session.key) console.log('req.session.key not defined');
-  if (!!req.user) req.session.key = req.user.name;
-  if(req.session.key) console.log('req.session.key is defined - user has access to / page', req.session.key);
   res.render('index', { user: req.user});
 });
 
@@ -78,13 +74,11 @@ app.get('/', (req, res) => {
 app.get('/account', ensureAuthenticated, (req, res) => {
   console.log('req.user is', req.user);
   console.log('req.isAuthenticated is', req.isAuthenticated());
-  if(req.session.key) console.log('req.session.key is defined user to / account', req.session.key);
   res.render('account', { user: req.user });
 });
 
 app.get('/abc', (req, res) => {
-  if(req.session.key) {
-  console.log('req.session.key is defined user to /abc page', req.session.key);
+  if(req.user) {
   res.send('you are authenticated');
   } else {
     res.send('no access');
