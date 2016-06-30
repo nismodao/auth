@@ -63,17 +63,21 @@ passport.deserializeUser(function(id, done) {
 });
 
 app.get('/', (req, res) => {
-  console.log('req.user is', req.user);
-  console.log('req.session', req.session);
-  console.log('req.sessioID is', req.sessionID);
-  console.log('req.isAuthenticated is', req.isAuthenticated());
+  console.log('req.user is from /', req.user);
+  console.log('req.session from /', req.session);
+  console.log('req.session.id from /', req.session.id);
+  console.log('req.sessioID is from /', req.sessionID);
+  console.log('req.isAuthenticated is from /', req.isAuthenticated());
   res.render('index', { user: req.user});
 });
 
 
 app.get('/account', ensureAuthenticated, (req, res) => {
-  console.log('req.user is', req.user);
-  console.log('req.isAuthenticated is', req.isAuthenticated());
+  console.log('req.user is from /account', req.user);
+  console.log('req.session from /account', req.session);
+  console.log('req.session.id from /account', req.session.id);
+  console.log('req.sessioID is from /account', req.sessionID);
+  console.log('req.isAuthenticated is from /account', req.isAuthenticated());
   res.render('account', { user: req.user });
 });
 
