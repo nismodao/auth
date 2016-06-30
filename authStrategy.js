@@ -8,7 +8,7 @@ module.exports = {
   google: new GoogleStrategy({
     clientID:     clientID,
     clientSecret: clientSecret,
-    callbackURL: process.env.WEBSERVER_URL + '/api/v1/connect/callback/google',
+    callbackURL: process.env.WEBSERVER_URL + '/api/v1/auth/connect/callback/google',
     passReqToCallback: true
     },
     (request, accessToken, refreshToken, profile, done) => {
