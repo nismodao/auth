@@ -26,6 +26,8 @@ app.use( bodyParser.urlencoded({
 }));
 
 app.use( cookieParser('cookie_secret'));
+app.use( passport.initialize());
+app.use( passport.session());
 app.use( session({
   secret: 'cookie_secret',
   name:   'newreactions',
@@ -38,8 +40,6 @@ app.use( session({
 }));
 
 
-app.use( passport.initialize());
-app.use( passport.session());
 
 var ensureAuthenticated = ( req, res, next ) => {
   console.log('req.session', req.session);
