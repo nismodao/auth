@@ -49,24 +49,14 @@ var ensureAuthenticated = ( req, res, next ) => {
   res.redirect('/login');
 };
 
-passport.serializeUser( (user, done) => {
-  console.log('user_id from serializeUser is', user._id);
+passport.serializeUser(function(user, done) {
   done(null, user._id);
 });
 
-passport.deserializeUser( (id, done) => {
-  console.log('id from deseralize is', id);
-  Model.User.findOne({_id: id},
-    (err, user) => {
-      if (err) {
-        console.log('err is', err);
-        done(err, null);
-      }
-      if (!err) {
-        console.log('user from deserializeUser is', user);
-        done(null,user);
-      }
-  })
+passport.deserializeUser(function(id, done) {
+  Model.User.findById(id, function(err, user) {
+    done(err, user);
+  });
 });
 
 app.get('/', (req, res) => {
