@@ -42,7 +42,7 @@ app.use( passport.session());
 
 
 var ensureAuthenticated = ( req, res, next ) => {
-  console.log('req.session', req.session);
+  console.log('req.session from ensureAuthenticated is', req.session);
   if (req.isAuthenticated()) {
    return next();
  }
@@ -60,15 +60,15 @@ passport.deserializeUser(function(id, done) {
 });
 
 app.get('/', (req, res) => {
-  console.log('req.user is', req.user);
-  console.log('req.session', req.session);
-  console.log('req.sessioID is', req.sessionID);
+  console.log('req.user from / is', req.user);
+  console.log('req.session from /', req.session);
+  console.log('req.sessionID from / is', req.sessionID);
   res.render('index', { user: req.user});
 });
 
 
 app.get('/account', ensureAuthenticated, (req, res) => {
-  console.log('req.user is', req.user);
+  console.log('req.user from /account is', req.user);
   res.render('account', { user: req.user });
 });
 
