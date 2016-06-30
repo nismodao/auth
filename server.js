@@ -51,6 +51,7 @@ var ensureAuthenticated = ( req, res, next ) => {
 };
 
 passport.serializeUser(function(user, done) {
+  console.log('user.id from serializeUser is', user._id);
   done(null, user._id);
 });
 
@@ -105,7 +106,7 @@ app.get('/connect/google', passport.authenticate( 'google', { scope: [
 
 app.get('/api/v1/auth/connect/callback/google', passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
-    res.redirect('/');
+    res.redirect('/account');
 });
 
 app.get('/logout', handler.logOut);
