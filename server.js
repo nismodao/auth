@@ -42,11 +42,10 @@ app.use( passport.session());
 
 
 var ensureAuthenticated = ( req, res, next ) => {
-  console.log('req.session from ensureAuthenticated is', req.session);
   if (req.isAuthenticated()) {
    return next();
  }
-  res.redirect('/login');
+  res.status(401).json({message: '401'});
 };
 
 passport.serializeUser(function(user, done) {
@@ -73,12 +72,8 @@ app.get('/account', ensureAuthenticated, (req, res) => {
   res.send(req.user);
 });
 
-app.get('/abc', (req, res) => {
-  if (req.user) {
-  res.send('you are authenticated');
-  } else {
-    res.send('no access');
-  }
+app.get('/verify', ensureAuthenticated, (req, res) => {
+  res.status(200).json({id: req.user._id, name: req.user.name});
 });
 
 app.get('/login', (req, res) => {
@@ -96,7 +91,7 @@ app.get('/connect/google', passport.authenticate( 'google', { scope: [
 
 app.get('/connect/callback/google', passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
-    res.send('hello there');
+    res.redirect('/#/dashboard');
 });
 
 app.get('/logout', handler.logOut);
