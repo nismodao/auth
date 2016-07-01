@@ -63,13 +63,14 @@ app.get('/', (req, res) => {
   console.log('req.user from / is', req.user);
   console.log('req.session from /', req.session);
   console.log('req.sessionID from / is', req.sessionID);
-  res.render('index', { user: req.user});
+  console.log('req.headers is from /', req.headers);
+  res.send('hello there from /');
 });
 
 
 app.get('/account', ensureAuthenticated, (req, res) => {
   console.log('req.user from /account is', req.user);
-  res.render('account', { user: req.user });
+  res.send(req.user);
 });
 
 app.get('/abc', (req, res) => {
@@ -95,7 +96,7 @@ app.get('/connect/google', passport.authenticate( 'google', { scope: [
 
 app.get('/connect/callback/google', passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
-    res.redirect('/');
+    res.send('hello there');
 });
 
 app.get('/logout', handler.logOut);
