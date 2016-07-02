@@ -18,19 +18,15 @@ module.exports = {
         if (err) {
           console.log('err is', err);
           done(err, null);
-        }
-        if (!err) {
+        } else {
           console.log('user is from Mongo', user);
           console.log('created from Mongo is', created);
           done(null,user,created);
-
-        } else {
-
         }
-      });
+      })
     }
   )
-}
+}  
 
 
 

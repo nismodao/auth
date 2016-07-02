@@ -30,7 +30,7 @@ module.exports = {
   },
   logOut: (req, res) => {
     req.session.destroy(() => {
-      res.redirect('/');
+      res.redirect('/#/');
     });
   },
   dropTable: (req, res) => {

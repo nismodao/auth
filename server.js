@@ -11,15 +11,11 @@ var express          = require( 'express' )
   , handler          = require( './handler')
   , strategy         = require( './authStrategy');
 
- 
 var strategy = strategy.google;
 passport.use(strategy);
 refresh.use(strategy);
 var PORT = process.env.PORT || 3000;
-app.set( 'views', __dirname + '/views');
-app.set( 'view engine', 'ejs');
 app.use( express.static(__dirname + '/public'));
-
 app.use( bodyParser.json());
 app.use( bodyParser.urlencoded({
   extended: true
@@ -41,7 +37,7 @@ app.use( passport.initialize());
 app.use( passport.session());
 
 
-var ensureAuthenticated = ( req, res, next ) => {
+var ensureAuthenticated = (req, res, next ) => {
   if (req.isAuthenticated()) {
    return next();
  }
@@ -58,26 +54,8 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-app.get('/', (req, res) => {
-  console.log('req.user from / is', req.user);
-  console.log('req.session from /', req.session);
-  console.log('req.sessionID from / is', req.sessionID);
-  console.log('req.headers is from /', req.headers);
-  res.send('hello there from /');
-});
-
-
-app.get('/account', ensureAuthenticated, (req, res) => {
-  console.log('req.user from /account is', req.user);
-  res.send(req.user);
-});
-
 app.get('/verify', ensureAuthenticated, (req, res) => {
   res.status(200).json({id: req.user._id, name: req.user.name});
-});
-
-app.get('/login', (req, res) => {
-  res.render('login', { user: req.user });
 });
 
 app.get('/connect/google', passport.authenticate( 'google', { scope: [
@@ -89,7 +67,7 @@ app.get('/connect/google', passport.authenticate( 'google', { scope: [
 }));
 
 
-app.get('/connect/callback/google', passport.authenticate('google', { failureRedirect: '/login' }),
+app.get('/connect/callback/google', passport.authenticate('google', { failureRedirect: '/#/sign-in' }),
   function(req, res) {
     res.redirect('/#/dashboard');
 });
