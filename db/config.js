@@ -1,12 +1,11 @@
 var mongoose = require('mongoose');
 var MongoClient = require('mongodb').MongoClient;
 var findOrCreate = require('mongoose-findorcreate');
-
+require('dotenv').config();
 var MONGODB_URI = process.env.MONGODB_URI;
 var db;
 
-
-mongoose.connect(MONGODB_URI, 
+mongoose.connect('mongodb://mongo:27017/newreactions', 
   function (err, database) {
   if (err) {
     console.log(err);
@@ -16,8 +15,6 @@ mongoose.connect(MONGODB_URI,
   console.log("Database connection ready");
   }
 });
-
-  // Save database object from the callback for reuse.
 
 var Schema = mongoose.Schema;
 
