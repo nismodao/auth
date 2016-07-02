@@ -1,11 +1,10 @@
 var mongoose = require('mongoose');
 var MongoClient = require('mongodb').MongoClient;
 var findOrCreate = require('mongoose-findorcreate');
-require('dotenv').config();
 var MONGODB_URI = process.env.MONGODB_URI;
 var db;
 
-mongoose.connect('mongodb://mongo:27017/newreactions', 
+mongoose.connect(MONGODB_URI, 
   function (err, database) {
   if (err) {
     console.log(err);
