@@ -22,7 +22,7 @@ var userSchema = new Schema({
   email: String,
   access_token: String,
   refresh_token: String
-});
+}, {timestamps: true});
 
 userSchema.plugin(findOrCreate);
 
